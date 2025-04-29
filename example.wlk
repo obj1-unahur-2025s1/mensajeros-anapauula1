@@ -56,3 +56,8 @@ object camion{
   method peso() = acoplados * 500
   // metodo de consulta(pido que me retorne algo)
 }
+object empresaMensajeria{
+  const mensajeros = #{ } // asi se definen los conjuntos
+  // a comparacion de las listas que son [ ] entre corchetes
+    
+}
