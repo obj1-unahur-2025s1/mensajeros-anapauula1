@@ -5,8 +5,8 @@ object paquete{
   // muestro la variable
   method pagarPaquete() {estaPago = true} 
   // modifico la variable
-  method puedeEntregarse() {
-    destino.dejaPasar(unMensajero) && self.estaPago()
+  method puedeEntregarse(unMensajero) {
+   return destino.dejaPasar(unMensajero) && self.estaPago()
   }
 }
 object puenteDeBrooklyn{
@@ -59,5 +59,28 @@ object camion{
 object empresaMensajeria{
   const mensajeros = #{ } // asi se definen los conjuntos
   // a comparacion de las listas que son [ ] entre corchetes
-    
+  // la diferencia entre conjunto y listas es que 
+  // la lista va ordenadamente
+  // los conjuntos no repiten los elementos
+  // a diferencia de la lista que puede tener elementos repetidos
+  method mensajeros() = mensajeros // para poder preguntar el conjunto
+  method contratar(unMensajero){
+      mensajeros.add(unMensajero)
+  } 
+  method despedir(unMensajero){
+      mensajeros.remove(unMensajero)
+  }
+  method despedirTodos(){
+      mensajeros.removeAll(mensajeros)
+  }
+  method esGrande(){
+    mensajeros.size()  > 2
+    // el tamaño de la lista debe de ser mayor a 2 ( de la coleccion)
+  }
+  method puedeEntregarsePaquete(){
+    // no deberiamos d pasarle el parametro --> porque hay uno solo
+    return paquete.puedeEntregarse(mensajeros.first()) 
+    // metodo de consulta, le pregunto si puede entregarse
+    // por el primer mensajero de la lista
+  }
 }
