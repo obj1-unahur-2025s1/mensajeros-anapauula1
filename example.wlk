@@ -83,4 +83,6 @@ object empresaMensajeria{
     // metodo de consulta, le pregunto si puede entregarse
     // por el primer mensajero de la lista
   }
+  method pesoUltimoMensajero() = mensajeros.last().peso()
+  // para saber el ultimo mensajero de la empresa
 }

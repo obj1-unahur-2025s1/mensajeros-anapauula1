@@ -1,0 +1,13 @@
+import example.*
+// primero importamos los archivos
+
+describe "test de segunda parte" {
+  
+  test "neo esta contratado" {
+    empresaMensajeria.contratar(neo)
+    assert.equals(neo,empresaMensajeria.mensajeros().contains(neo))
+  // para fijarnos si el mensajero neo existe en la coleccion
+  // contains = para ver si contiene el objeto
+  // equals == comparacion, mensajero act y esperado
+  }
+}
