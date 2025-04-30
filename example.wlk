@@ -8,7 +8,7 @@ object paquete{
   method puedeEntregarse(unMensajero) {
    return destino.dejaPasar(unMensajero) && self.estaPago()
   }
-  
+  method precioTotal() = 50
 }
 object puenteDeBrooklyn{
   method dejaPasar(unMensajero){
@@ -54,6 +54,39 @@ object camion{
   }
   method peso() = acoplados * 500
 }
+// ----------------- Tercera Parte -------------
+
+object paquetito{
+  method precioTotal() = 0
+  // porque es gratis
+   method estaPago() = true
+   // siempre esta pago
+   method puedeEntregarse(unMensajero) = true
+   // cualquier mensajero lo puede entregar
+}
+object paquetonViajero{
+   const destinos = [ ] // tie
+   var importePagado = 0
+
+  // 1) precio de 100 x cada destino
+  method precioTotal(){
+    return 100 * destinos.size()
+    // el tamaño de la lista, multiplicamos
+  }
+  // 2) pago total para ser enviado
+  method estaPago(){
+    return importePagado >= self.precioTotal()
+    // igual al precio total
+  }
+  method puedeEntregarse(unMensajero){
+    return self.precioTotal() && self.mensajeroPuedepasar(unMensajero)
+  }
+  // 3) mensajero ---> pasa a todos los destinos
+  method mensajeroPuedepasar(unMensajero){
+    return destinos.all({p => p.dejaPasar(unMensajero)})
+    // dejaPasar ---> metodo que hciimos en la matrix y puente
+  }
+}
 object empresaMensajeria{
   const mensajeros = #{ } // asi se definen los conjuntos
   // a comparacion de las listas que son [ ] entre corchetes
@@ -62,7 +95,8 @@ object empresaMensajeria{
   // los conjuntos no repiten los elementos
   // a diferencia de la lista que puede tener elementos repetidos
   method mensajeros() = mensajeros // para poder preguntar el conjunto
-
+  const paquetesPendientes = []
+  const paquetesEnviados = []
    // 1) 
     method contratar(unMensajero){
         return mensajeros.add(unMensajero)
@@ -90,5 +124,43 @@ object empresaMensajeria{
     // 6)
     method pesoUltimo(){
         return mensajeros.last().peso()
+    }
+
+    // --------- ULTIMA PARTE -----------------
+    //1)
+    method puedeSerEnviado(unPaquete){
+      return mensajeros.any({m => unPaquete.puedeEntregarse(m)})
+      // aca ponemos m ---> mensajero
+      // para ver si el m que es el mensajero que recorre la lista
+      // puede entregar el paquete
+    }
+    // 2)
+    method puedenEntregar(unPaquete){
+      return mensajeros.filter({m => unPaquete.puedeEntregarse(m)})
+    }
+    // 3)
+    method tieneSobrepeso(){
+      return self.pesoDeLosMensajeros() / mensajeros.size() > 500
+    }
+    method pesoDeLosMensajeros(){
+      // sumamos el peso de los mensajeros
+        return mensajeros.sum({s => s.peso()})
+    }
+    method facturacionEmpresa(){
+      return mensajeros.sum({s => s.precioTotal()})
+    }
+    method enviarPaquetes(listaDePaquetes){
+      return listaDePaquetes.forEach({x => self.enviar(x)})
+    }
+    method enviar(unPaquete){
+      if (self.puedenEntregar(unPaquete)){
+          paquetesEnviados.add(unPaquete)
+      }
+      else{
+        paquetesPendientes.add(unPaquete)
+      }
+    }
+    method pendienteMasCaro(){
+      return paquetesPendientes.max({x=> x.precioTotal()})
     }
 }
